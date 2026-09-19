@@ -1,0 +1,172 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Hotel Offer Orchestrator",
+    "description": "Test collection for Hotel Offer Orchestrator API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Get hotels - Delhi (with overlaps)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/hotels?city=delhi",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "hotels"],
+          "query": [
+            {
+              "key": "city",
+              "value": "delhi"
+            }
+          ]
+        },
+        "description": "Fetches best-priced hotels for Delhi. Expect Holtin from Supplier B (5340) and Radison from Supplier A (5900)."
+      },
+      "response": []
+    },
+    {
+      "name": "Get hotels - Delhi with price filter",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/hotels?city=delhi&minPrice=5000&maxPrice=6000",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "hotels"],
+          "query": [
+            {
+              "key": "city",
+              "value": "delhi"
+            },
+            {
+              "key": "minPrice",
+              "value": "5000"
+            },
+            {
+              "key": "maxPrice",
+              "value": "6000"
+            }
+          ]
+        },
+        "description": "Price filter is applied inside Redis via ZRANGEBYSCORE."
+      },
+      "response": []
+    },
+    {
+      "name": "Get hotels - city with no results",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/hotels?city=nowhere",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "hotels"],
+          "query": [
+            {
+              "key": "city",
+              "value": "nowhere"
+            }
+          ]
+        },
+        "description": "Unknown city should return an empty array []."
+      },
+      "response": []
+    },
+    {
+      "name": "Get hotels - Mumbai",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/hotels?city=mumbai",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "hotels"],
+          "query": [
+            {
+              "key": "city",
+              "value": "mumbai"
+            }
+          ]
+        },
+        "description": "Mumbai has hotels from both suppliers with no overlapping names."
+      },
+      "response": []
+    },
+    {
+      "name": "Health check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Reports health of Supplier A, Supplier B, and Redis."
+      },
+      "response": []
+    },
+    {
+      "name": "Supplier A - Delhi",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/supplierA/hotels?city=delhi",
+          "host": ["{{baseUrl}}"],
+          "path": ["supplierA", "hotels"],
+          "query": [
+            {
+              "key": "city",
+              "value": "delhi"
+            }
+          ]
+        },
+        "description": "Direct mock Supplier A listing for debugging."
+      },
+      "response": []
+    },
+    {
+      "name": "Supplier B - Delhi",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/supplierB/hotels?city=delhi",
+          "host": ["{{baseUrl}}"],
+          "path": ["supplierB", "hotels"],
+          "query": [
+            {
+              "key": "city",
+              "value": "delhi"
+            }
+          ]
+        },
+        "description": "Direct mock Supplier B listing for debugging."
+      },
+      "response": []
+    },
+    {
+      "name": "Missing city param (error)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/hotels",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "hotels"]
+        },
+        "description": "Should return 400 when city is missing."
+      },
+      "response": []
+    }
+  ]
+}
