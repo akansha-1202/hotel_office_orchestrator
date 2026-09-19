@@ -149,12 +149,3 @@ src/
     worker.ts           Temporal worker process
     client.ts           Start workflow from Express
 ```
-
-## How to explain this in an interview
-
-1. Express receives the request and starts a Temporal workflow.
-2. Temporal runs two activities in parallel to fetch Supplier A and B.
-3. The workflow merges by hotel name and keeps the lower price.
-4. The result is stored in Redis as a sorted set (score = price).
-5. `minPrice` / `maxPrice` use Redis `ZRANGEBYSCORE` for filtering.
-6. Docker Compose runs API, Worker, Redis, and Temporal together.
